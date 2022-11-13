@@ -1,152 +1,74 @@
 package com.mitocode.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.List;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "usuarios")
-public class Usuario implements UserDetails {
+@Table(name = "usuario")
+public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	private Integer idUsuario;
 
-    private String username;
-    private String password;
-    private String nombre;
-    private String apellido;
-    private String email;
-    private String telefono;
-    private boolean enabled = true;
-    private String perfil;
+	@Column(name = "nombre", nullable = false, unique = true)
+	private String username;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "usuario")
-    @JsonIgnore
-    private Set<UsuarioRol> usuarioRoles = new HashSet<>();
+	@Column(name = "clave", nullable = false)
+	private String password;
 
-    public Usuario(){
+	@Column(name = "estado", nullable = false)
+	private boolean enabled;
 
-    }
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "idUsuario"), inverseJoinColumns = @JoinColumn(name = "id_rol", referencedColumnName = "idRol"))
+	private List<Rol> roles;
 
-    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, boolean enabled, String perfil) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
-        this.telefono = telefono;
-        this.enabled = enabled;
-        this.perfil = perfil;
-    }
+	public Integer getIdUsuario() {
+		return idUsuario;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setIdUsuario(Integer idUsuario) {
+		this.idUsuario = idUsuario;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Authority> autoridades = new HashSet<>();
-        this.usuarioRoles.forEach(usuarioRol -> {
-            autoridades.add(new Authority(usuarioRol.getRol().getRolNombre()));
-        });
-        return autoridades;
-    }
+	public List<Rol> getRoles() {
+		return roles;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setRoles(List<Rol> roles) {
+		this.roles = roles;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(String perfil) {
-        this.perfil = perfil;
-    }
-
-    public Set<UsuarioRol> getUsuarioRoles() {
-        return usuarioRoles;
-    }
-
-    public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
-        this.usuarioRoles = usuarioRoles;
-    }
 }
