@@ -1,45 +1,50 @@
 package com.mitocode.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "rol")
+@Table(name = "roles")
 public class Rol {
 
-	@Id
-	private Integer idRol;
+    @Id
+    private Long rolId;
+    private String rolNombre;
 
-	@Column(name = "nombre")
-	private String nombre;
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "rol")
+    private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
-	@Column(name = "descripcion")
-	private String descripcion;
+    public Rol(){
 
-	public Integer getIdRol() {
-		return idRol;
-	}
+    }
 
-	public void setIdRol(Integer idRol) {
-		this.idRol = idRol;
-	}
+    public Rol(Long rolId, String rolNombre) {
+        this.rolId = rolId;
+        this.rolNombre = rolNombre;
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public Long getRolId() {
+        return rolId;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public void setRolId(Long rolId) {
+        this.rolId = rolId;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public String getRolNombre() {
+        return rolNombre;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public void setRolNombre(String rolNombre) {
+        this.rolNombre = rolNombre;
+    }
 
+    public Set<UsuarioRol> getUsuarioRoles() {
+        return usuarioRoles;
+    }
+
+    public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
+        this.usuarioRoles = usuarioRoles;
+    }
 }
