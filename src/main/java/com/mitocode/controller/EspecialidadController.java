@@ -77,7 +77,7 @@ public class EspecialidadController {
 		return ResponseEntity.created(location).build();
 	}
 	
-	@PutMapping
+	@PutMapping("/{id}")
 	public ResponseEntity<Especialidad> modificar(@Valid @RequestBody Especialidad objeto) {
 		Especialidad obj = service.modificar(objeto);
 		return new ResponseEntity<Especialidad>(obj, HttpStatus.OK);
