@@ -34,56 +34,59 @@ public class ExamenController {
 
 	@Autowired
 	private IExamenService service;
-	
+
 	@GetMapping
-	public ResponseEntity<List<Examen>> listar(){
+	public ResponseEntity<List<Examen>> listar() {
 		List<Examen> lista = service.listar();
 		return new ResponseEntity<List<Examen>>(lista, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Examen> listarPorId(@PathVariable("id") Integer id) {
 		Examen obj = service.listarPorId(id);
-		if(obj.getIdExamen() == null) {
+		if (obj.getIdExamen() == null) {
 			throw new ModeloNotFoundException("ID NO ENCONTRADO " + id);
 		}
 		return new ResponseEntity<Examen>(obj, HttpStatus.OK);
 	}
-	
-	//https://docs.spring.io/spring-hateoas/docs/current/reference/html/
-	//Hateoas 1.0 > Spring Boot 2.2
+
+	// https://docs.spring.io/spring-hateoas/docs/current/reference/html/
+	// Hateoas 1.0 > Spring Boot 2.2
 	@GetMapping("/hateoas/{id}")
-	public EntityModel<Examen> listarPorIdHateoas(@PathVariable("id") Integer id){
+	public EntityModel<Examen> listarPorIdHateoas(@PathVariable("id") Integer id) {
 		Examen pac = service.listarPorId(id);
-		
-		//localhost:8080/Examens/{id}
+
+		// localhost:8080/Examens/{id}
 		EntityModel<Examen> recurso = new EntityModel<Examen>(pac);
 		WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).listarPorId(id));
 		recurso.add(linkTo.withRel("Examen-resource"));
 		return recurso;
-	
-	}		
-	
-	/*@PostMapping
-	public ResponseEntity<Examen> registrar(@Valid @RequestBody Examen objeto) {
-		Examen obj = service.registrar(objeto);
-		return new ResponseEntity<Examen>(obj, HttpStatus.CREATED);
-	}*/
-	
+
+	}
+
+	/*
+	 * @PostMapping
+	 * public ResponseEntity<Examen> registrar(@Valid @RequestBody Examen objeto) {
+	 * Examen obj = service.registrar(objeto);
+	 * return new ResponseEntity<Examen>(obj, HttpStatus.CREATED);
+	 * }
+	 */
+
 	@PostMapping
 	public ResponseEntity<Object> registrar(@Valid @RequestBody Examen objeto) {
 		Examen pac = service.registrar(objeto);
-		//localhost:8080/Examens/5
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pac.getIdExamen()).toUri();
+		// localhost:8080/Examens/5
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pac.getIdExamen())
+				.toUri();
 		return ResponseEntity.created(location).build();
 	}
-	
-	@PutMapping
+
+	@PutMapping("/{id}")
 	public ResponseEntity<Examen> modificar(@Valid @RequestBody Examen objeto) {
 		Examen obj = service.modificar(objeto);
 		return new ResponseEntity<Examen>(obj, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> eliminar(@PathVariable("id") Integer id) {
 		service.eliminar(id);
