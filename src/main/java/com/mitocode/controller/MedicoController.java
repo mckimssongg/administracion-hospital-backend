@@ -78,7 +78,7 @@ public class MedicoController {
 		return ResponseEntity.created(location).build();
 	}
 	
-	@PutMapping
+	@PutMapping("/{id}")
 	public ResponseEntity<Medico> modificar(@Valid @RequestBody Medico objeto) {
 		Medico obj = service.modificar(objeto);
 		return new ResponseEntity<Medico>(obj, HttpStatus.OK);

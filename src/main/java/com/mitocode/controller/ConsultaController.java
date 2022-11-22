@@ -64,11 +64,11 @@ public class ConsultaController {
 	
 	}		
 	
-	/*@PostMapping
+	@PostMapping("/registrar")
 	public ResponseEntity<Consulta> registrar(@Valid @RequestBody Consulta objeto) {
 		Consulta obj = service.registrar(objeto);
 		return new ResponseEntity<Consulta>(obj, HttpStatus.CREATED);
-	}*/
+	}
 	
 	/*@PostMapping
 	public ResponseEntity<Object> registrar(@Valid @RequestBody Consulta objeto) {
@@ -86,7 +86,7 @@ public class ConsultaController {
 		return ResponseEntity.created(location).build();
 	}
 	
-	@PutMapping
+	@PutMapping("/{id}")
 	public ResponseEntity<Consulta> modificar(@Valid @RequestBody Consulta objeto) {
 		Consulta obj = service.modificar(objeto);
 		return new ResponseEntity<Consulta>(obj, HttpStatus.OK);
